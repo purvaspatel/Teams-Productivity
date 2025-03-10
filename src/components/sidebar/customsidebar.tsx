@@ -47,11 +47,7 @@ const CustomSidebar: React.FC<CustomSidebarProps> = ({ setActiveComponent }) => 
       icon: CheckSquare,
       action: () => setActiveComponent("tasks")
     },
-    {
-      title: "Add Task",
-      icon: Plus,
-      action: () => setActiveComponent("taskForm")
-    },
+    
     {
       title: "Add Projects",
       icon: FolderDot,

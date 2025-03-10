@@ -18,7 +18,9 @@ Upcoming features I am working on:
 To run the project
 1. change directory to codebase-nxt-purva
 2. run npm install
-3. rename .env.example to .env and add your Mongodb keys and write your own custom nextauth-secret.
+3. create .env file in root and add
+MONGO_DB_URI=your mongo db connectionid
+NEXTAUTH_SECRET=randomauthsecretulike
 4. npm run dev
  
 

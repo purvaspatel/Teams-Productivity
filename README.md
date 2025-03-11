@@ -5,7 +5,7 @@ Features so far:
 2. Login/Register with next-auth
 3. Session management
 4. Project creation
-5. Task creation
+5. Task creation + assign multiple users same task.
 6. Add other members using the platform to collaborate on the project
 
 Upcoming features I am working on:

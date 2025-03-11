@@ -7,13 +7,15 @@ Features so far:
 4. Project creation
 5. Task creation + assign multiple users same task.
 6. Add other members using the platform to collaborate on the project
+7. Assign specfic team member a task.
+8. Summary on dashboard about various updates and tasks.
 
-Upcoming features I am working on:
-1. Assign specfic team member a task.
-2. Summary on dashboard about various updates and tasks.
-3. Create document like Notion.
-4. Integrate other tools such as drawing board, flow diagram.
-5. Chat with team members.
+Upcoming features I am working on: 
+-> Remvove user from a team.
+-> Edit Project details, update a project with new users/remove users etc.
+-> Create document like Notion.
+-> Integrate other tools such as drawing board, flow diagram.
+-> Chat with team members.
 
 To run the project
 1. change directory to codebase-nxt-purva

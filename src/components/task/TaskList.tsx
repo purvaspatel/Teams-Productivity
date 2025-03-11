@@ -31,7 +31,7 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
     
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
-    const tasksPerPage = 10;
+    const tasksPerPage = 7;
 
     /** Fetch all tasks from API */
     useEffect(() => {

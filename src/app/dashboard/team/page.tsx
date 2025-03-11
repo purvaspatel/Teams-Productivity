@@ -47,7 +47,7 @@ export default function TeamPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="container py-8">
+    <div className="container">
       <h1 className="text-2xl font-bold mb-6">{team.name}</h1>
       
       <div className="grid gap-6">

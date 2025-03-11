@@ -119,7 +119,7 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container">
       {/* Navigation */}
       <Button
         variant="ghost"

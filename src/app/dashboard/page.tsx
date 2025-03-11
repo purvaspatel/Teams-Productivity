@@ -96,9 +96,9 @@ export default function DashboardPage() {
     : 0;
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen">
       {/* Main content area */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1">
         <div className="container mx-auto py-6 px-4 md:px-6 lg:px-8">
           {/* Profile Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">

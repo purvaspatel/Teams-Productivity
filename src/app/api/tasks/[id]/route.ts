@@ -2,7 +2,21 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import Task from "@/lib/models/task";
 
+export async function GET(req: Request, { params }: { params: { id: string } }) {
+    try {
+        await connectToDatabase();
+        const task = await Task.findById(params.id);
 
+        if (!task) {
+            return NextResponse.json({ message: "Task not found" }, { status: 404 });
+        }
+
+        return NextResponse.json(task, { status: 200 });
+    } catch (error) {
+        console.error("Error fetching task:", error);
+        return NextResponse.json({ message: "Failed to fetch task" }, { status: 500 });
+    }
+}
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
     try{
         await connectToDatabase();

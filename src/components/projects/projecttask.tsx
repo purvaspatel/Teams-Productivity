@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import { toast } from 'sonner';
-
+import { useRouter } from "next/navigation";
 interface ProjectTasksProps {
     projectId: string;
     refresh: boolean;
@@ -16,9 +16,25 @@ interface ProjectTasksProps {
 
 const ProjectTasks: React.FC<ProjectTasksProps> = ({ projectId, refresh, setRefresh }) => {
     const { data: session } = useSession();
+    const router = useRouter();
     const [tasks, setTasks] = useState<any[]>([]);
     const [avatars, setAvatars] = useState<{ [email: string]: string }>({});
-    
+
+    useEffect(() => {
+        async function getAllTasks() {
+            if (!session?.user?.email) return;
+            const res = await fetch('/api/tasks');
+            const data = await res.json();
+            const userTasks = data.filter((task: any) =>
+                task.createdBy === session.user.email || task.assignedTo.includes(session.user.email)
+            );
+            setTasks(userTasks);
+            if (userTasks.length === 0) {
+                toast.info("No tasks found! You must be assigned or own tasks to view them.", { id: "no-tasks" });
+            }
+        }
+        getAllTasks();
+    }, [refresh, session]);
     useEffect(() => {
         async function fetchProjectTasks() {
             if (!session?.user?.email || !projectId) return;
@@ -60,7 +76,7 @@ const ProjectTasks: React.FC<ProjectTasksProps> = ({ projectId, refresh, setRefr
     }, [tasks]);
 
     return (
-        <div className="max-w-6xl mx-auto p-6">
+        <div className="max-w-6xl  mt-6 mb-10">
             <h2 className="text-2xl font-bold tracking-tight">Project Tasks</h2>
             
             <div className="mt-6 bg-white border rounded-lg shadow-md">
@@ -77,7 +93,7 @@ const ProjectTasks: React.FC<ProjectTasksProps> = ({ projectId, refresh, setRefr
                     </TableHeader>
                     <TableBody>
                         {tasks.filter(task => task.project === projectId).map((task) => (
-                            <TableRow key={task._id}>
+                            <TableRow key={task._id} onClick={() => router.push(`/dashboard/tasks/${task._id}`)}>
                                 <TableCell>{task.title}</TableCell>
                                 <TableCell><Badge>{task.status}</Badge></TableCell>
                                 <TableCell>

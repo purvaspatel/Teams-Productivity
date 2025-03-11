@@ -100,7 +100,7 @@ export default function TeamMembers() {
     <div className="space-y-6">
       {/* Add Member Button (Opens Dialog) */}
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Team Members</h2>
+        <h2 className="text-2xl font-semibold">Team Members</h2>
         <Dialog>
           <DialogTrigger asChild>
             <Button size="sm" className="flex items-center gap-1">

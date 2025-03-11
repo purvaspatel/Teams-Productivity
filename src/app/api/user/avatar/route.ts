@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ avatar: user.avatar || "/default-avatar.png" });
   } catch (error) {
-    console.error("❌ Error fetching user avatar:", error);
+    console.error("Error fetching user avatar:", error);
     return NextResponse.json({ message: "Failed to fetch avatar" }, { status: 500 });
   }
 }

@@ -9,11 +9,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex h-screen overflow-hidden">
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar setSelectedProjectId={() => {}} setActiveComponent={() => {}} />
         <SidebarInset>
           <header className="flex h-16 items-center gap-2">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
+            <SidebarTrigger className="ml-1 mt-1" />
+            
           </header>
           <main className="flex-1  lg:px-8 ">{children}</main>
         </SidebarInset>

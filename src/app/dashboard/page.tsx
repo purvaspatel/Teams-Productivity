@@ -13,12 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Briefcase, 
-  CheckCircle, 
-  Clock, 
-  ListChecks, 
-  Loader, 
+import {
+  Briefcase,
+  CheckCircle,
+  Clock,
+  ListChecks,
+  Loader,
   Calendar,
   AlertTriangle,
   BarChart
@@ -42,7 +42,7 @@ export default function DashboardPage() {
   async function fetchDashboardData(email: string) {
     try {
       setLoading(true);
-      
+
       // Fetch tasks assigned to user
       const tasksRes = await fetch(`/api/tasks?email=${email}`);
       const tasksData = tasksRes.ok ? await tasksRes.json() : [];
@@ -73,26 +73,26 @@ export default function DashboardPage() {
     review: tasks.filter((task) => task.status === "review").length,
     completed: tasks.filter((task) => task.status === "complete").length,
     upcoming: tasks.filter((task) => task.dueDate && new Date(task.dueDate) > new Date()).length,
-    urgent: tasks.filter((task) => 
-      task.priority === "high" && 
+    urgent: tasks.filter((task) =>
+      task.priority === "high" &&
       task.status !== "complete" &&
-      task.dueDate && 
+      task.dueDate &&
       new Date(task.dueDate) < new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
     ).length,
   };
 
   // Get tasks due soon (within next 3 days)
   const upcomingTasks = tasks
-    .filter(task => 
-      task.dueDate && 
-      new Date(task.dueDate) > new Date() && 
+    .filter(task =>
+      task.dueDate &&
+      new Date(task.dueDate) > new Date() &&
       new Date(task.dueDate) < new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000)
     )
     .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
 
   // Calculate completion percentage
-  const completionPercentage = tasks.length > 0 
-    ? Math.round((taskSummary.completed / tasks.length) * 100) 
+  const completionPercentage = tasks.length > 0
+    ? Math.round((taskSummary.completed / tasks.length) * 100)
     : 0;
 
   return (
@@ -120,37 +120,37 @@ export default function DashboardPage() {
           </div>
 
           {/* Task Statistics */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
-            <StatCard 
-              title="Total Tasks" 
-              value={taskSummary.total} 
-              icon={<ListChecks className="text-indigo-500" />} 
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+            <StatCard
+              title="Total Tasks"
+              value={taskSummary.total}
+              icon={<ListChecks size={18} className="text-indigo-500" />}
             />
-            <StatCard 
-              title="To-Do" 
-              value={taskSummary.todo} 
-              icon={<Clock className="text-blue-500" />} 
+            <StatCard
+              title="To-Do"
+              value={taskSummary.todo}
+              icon={<Clock size={18} className="text-blue-500" />}
             />
-            <StatCard 
-              title="In Progress" 
-              value={taskSummary.inProgress} 
-              icon={<Loader className="text-amber-500" />} 
+            <StatCard
+              title="In Progress"
+              value={taskSummary.inProgress}
+              icon={<Loader size={18} className="text-amber-500" />}
             />
-            <StatCard 
-              title="Under Review" 
-              value={taskSummary.review} 
-              icon={<Briefcase className="text-purple-500" />} 
+            <StatCard
+              title="Under Review"
+              value={taskSummary.review}
+              icon={<Briefcase size={18} className="text-purple-500" />}
             />
-            <StatCard 
-              title="Completed" 
-              value={taskSummary.completed} 
-              icon={<CheckCircle className="text-green-500" />}
+            <StatCard
+              title="Completed"
+              value={taskSummary.completed}
+              icon={<CheckCircle size={18} className="text-green-500" />}
               className="bg-green-50"
             />
-            <StatCard 
-              title="Urgent" 
-              value={taskSummary.urgent} 
-              icon={<AlertTriangle className="text-red-500" />}
+            <StatCard
+              title="Urgent"
+              value={taskSummary.urgent}
+              icon={<AlertTriangle size={18} className="text-red-500" />}
               className="bg-red-50"
             />
           </div>
@@ -168,13 +168,13 @@ export default function DashboardPage() {
                     <span className="text-sm font-medium">{completionPercentage}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div 
-                      className="bg-green-500 h-2.5 rounded-full" 
+                    <div
+                      className="bg-green-500 h-2.5 rounded-full"
                       style={{ width: `${completionPercentage}%` }}
                     ></div>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4 mt-4">
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
                     <div className="flex items-center gap-2 mb-1">
@@ -210,16 +210,15 @@ export default function DashboardPage() {
                   ) : upcomingTasks.length > 0 ? (
                     <div className="space-y-2">
                       {upcomingTasks.map((task) => (
-                        <div 
-                          key={task._id} 
+                        <div
+                          key={task._id}
                           className="p-2 rounded-md border flex items-center gap-2 hover:bg-gray-50 cursor-pointer"
                           onClick={() => router.push(`/dashboard/tasks/${task._id}`)}
                         >
-                          <div className={`w-2 h-2 rounded-full ${
-                            new Date(task.dueDate) < new Date(new Date().getTime() + 24 * 60 * 60 * 1000) 
-                              ? 'bg-red-500' 
+                          <div className={`w-2 h-2 rounded-full ${new Date(task.dueDate) < new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+                              ? 'bg-red-500'
                               : 'bg-amber-500'
-                          }`} />
+                            }`} />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate">{task.title}</p>
                             <p className="text-xs text-gray-500">
@@ -243,7 +242,7 @@ export default function DashboardPage() {
               <TabsTrigger value="tasks">My Tasks</TabsTrigger>
               <TabsTrigger value="projects">My Projects</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="tasks">
               <Card className="shadow-sm border">
                 <CardHeader className="pb-2">
@@ -262,8 +261,8 @@ export default function DashboardPage() {
                         {tasks
                           .filter((task) => task.assignedTo.includes(session?.user?.email))
                           .map((task) => (
-                            <div 
-                              key={task._id} 
+                            <div
+                              key={task._id}
                               className="flex items-center justify-between p-3 rounded-md bg-white border hover:bg-gray-50 cursor-pointer"
                               onClick={() => router.push(`/dashboard/tasks/${task._id}`)}
                             >
@@ -284,8 +283,8 @@ export default function DashboardPage() {
                                   )}
                                 </p>
                               </div>
-                              <Badge 
-                                variant="outline" 
+                              <Badge
+                                variant="outline"
                                 className={`
                                   ${task.status === "todo" ? "bg-blue-50 text-blue-700" : ""}
                                   ${task.status === "in-progress" ? "bg-amber-50 text-amber-700" : ""}
@@ -305,7 +304,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            
+
             <TabsContent value="projects">
               <Card className="shadow-sm border">
                 <CardHeader className="pb-2">
@@ -361,24 +360,26 @@ export default function DashboardPage() {
 }
 
 /** Reusable Stat Card */
-function StatCard({ 
-  title, 
-  value, 
-  icon, 
-  className = "" 
-}: { 
-  title: string; 
-  value: number; 
-  icon: JSX.Element; 
+function StatCard({
+  title,
+  value,
+  icon,
+  className = ""
+}: {
+  title: string;
+  value: number;
+  icon: JSX.Element;
   className?: string;
 }) {
   return (
-    <Card className={`border flex items-center gap-3 p-4 rounded-lg shadow-sm ${className}`}>
-      <div className="p-2 bg-white rounded-lg border">{icon}</div>
-      <div>
-        <h3 className="text-lg font-semibold">{value}</h3>
-        <p className="text-xs text-gray-600">{title}</p>
+    <Card className={`p-3 ${className}`}>
+      <div className="flex items-center gap-2">
+        {icon && <div className="flex-shrink-0">{icon}</div>}
+        <div>
+          <p className="text-sm font-medium text-gray-500">{title}</p>
+          <p className="text-2xl font-bold">{value}</p>
+        </div>
       </div>
     </Card>
   );
-}
+};

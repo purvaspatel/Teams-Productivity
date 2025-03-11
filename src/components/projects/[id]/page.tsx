@@ -49,22 +49,13 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
   const fetchProjectData = async () => {
     setLoading(true);
     setError(null);
-
     try {
       // Fetch project details
       const projectRes = await fetch(`/api/projects/${projectId}`);
       if (!projectRes.ok) throw new Error(`Failed to fetch project: ${projectRes.status}`);
-
       const projectData = await projectRes.json();
       console.log("Project data fetched:", projectData);
       setProject(projectData);
-
-      // Fetch tasks for this project (uncomment and implement when ready)
-      // const tasksRes = await fetch(`/api/projects/${projectId}/tasks`);
-      // if (!tasksRes.ok) throw new Error(`Failed to fetch tasks: ${tasksRes.status}`);
-      // const tasksData = await tasksRes.json();
-      // setTasks(tasksData);
-      
     } catch (err: any) {
       console.error("Error fetching project data:", err);
       setError(err.message || "Failed to load project");
@@ -72,17 +63,13 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
       setLoading(false);
     }
   };
-
   const isOwner = project && session?.user?.email === project.owner;
-
   if (status === "loading") {
     return <div className="flex justify-center p-10">Loading session...</div>;
   }
-
   if (loading) {
     return <div className="flex justify-center p-10">Loading project details...</div>;
   }
-
   if (error) {
     return (
       <div className="container mx-auto py-8 px-4 text-center">
@@ -94,7 +81,6 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
       </div>
     );
   }
-
   if (!project) {
     return (
       <div className="container mx-auto py-8 px-4 text-center">
@@ -106,7 +92,6 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
       </div>
     );
   }
-
   return (
     <div className="container mx-auto py-8 px-4">
       {/* Navigation and header */}
@@ -118,7 +103,6 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
         >
           <ChevronLeft size={16} className="mr-1" /> Back to Projects
         </Button>
-        
         <div className="flex items-start justify-between flex-wrap gap-4">
           <div>
             <div className="flex items-center gap-2">
@@ -140,7 +124,6 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
               </div>
             </div>
           </div>
-
           <div className="flex gap-2">
             {isOwner && (
               <>
@@ -163,7 +146,6 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
 
         {project.description && <p className="mt-4 text-gray-600">{project.description}</p>}
       </div>
-
       {/* Team members section */}
       <Card className="mb-8">
         <CardHeader>
@@ -188,37 +170,6 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
           </div>
         </CardContent>
       </Card>
-
-      {/* Tasks section - Uncomment when you're ready to implement tasks */}
-      {/* <Tabs defaultValue="all" className="w-full">
-        <TabsList>
-          <TabsTrigger value="all">All Tasks ({tasks.length})</TabsTrigger>
-          <TabsTrigger value="todo">To Do</TabsTrigger>
-          <TabsTrigger value="in-progress">In Progress</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
-        </TabsList>
-        <TabsContent value="all">
-          <Card>
-            <CardHeader>
-              <CardTitle>All Tasks</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {tasks.length === 0 ? (
-                <p className="text-center text-gray-500 py-6">No tasks found for this project.</p>
-              ) : (
-                <div className="space-y-4">
-                  {tasks.map((task) => (
-                    <div key={task._id} className="border p-4 rounded-lg">
-                      <h3 className="font-medium">{task.title}</h3>
-                      <p className="text-sm text-gray-600">{task.description}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs> */}
     </div>
   );
 }

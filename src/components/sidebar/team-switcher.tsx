@@ -54,7 +54,7 @@ export function TeamSwitcher() {
         </SidebarMenuItem>
       </SidebarMenu>
 
-      {/* Render TeamMembers component when showTeam is true */}
+     
       
     </>
   );

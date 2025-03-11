@@ -48,11 +48,11 @@ export default function ProjectForm({
       if (res.ok) {
         setTeamMembers(data.members || []);
       } else {
-        console.warn("⚠️ No team members found:", data.message);
+        console.warn("No team members found:", data.message);
         setTeamMembers([]);
       }
     } catch (error) {
-      console.error("❌ Error fetching team members:", error);
+      console.error("Error fetching team members:", error);
       toast.error("Failed to fetch team members");
     }
   };

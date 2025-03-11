@@ -14,14 +14,14 @@ export const useTeamStore = create<TeamState>()(
 
       // Manually set team
       setTeam: (team) => {
-        console.log("✅ Setting team in Zustand:", team);
+        console.log("Setting team in Zustand:", team);
         set({ team });
       },
 
       // Fetch team using user email
       fetchTeam: async (userEmail) => {
         if (!userEmail) {
-          console.warn("⚠️ No user email provided to fetch team.");
+          console.warn("No user email provided to fetch team.");
           return;
         }
 
@@ -31,13 +31,13 @@ export const useTeamStore = create<TeamState>()(
           const data = await res.json();
 
           if (res.ok) {
-            console.log("✅ Team fetched successfully:", data);
+            console.log("Team fetched successfully:", data);
             set({ team: { id: data._id, name: data.name } });
           } else {
-            console.error("❌ Failed to fetch team:", data.message);
+            console.error("Failed to fetch team:", data.message);
           }
         } catch (error) {
-          console.error("❌ Error fetching team:", error);
+          console.error("Error fetching team:", error);
         }
       },
     }),

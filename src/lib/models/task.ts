@@ -13,9 +13,9 @@ const TaskSchema = new Schema(
     priority: { type: String, enum: ["low", "medium", "high"], default: "medium" },
     category: { type: String, required: true, default: "general" },
     dueDate: { type: Date, required: false },
-    createdBy: { type: String, required: true }, // Store user's email
-    assignedTo: [{ type: String }], // Store assigned members' emails
-    project: { type: Schema.Types.ObjectId, ref: "Project", required: true }, // 🔥 Ensure project is required
+    createdBy: { type: String, required: true }, 
+    assignedTo: [{ type: String }], 
+    project: { type: Schema.Types.ObjectId, ref: "Project", required: true }, 
     subtasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     comments: [
       {

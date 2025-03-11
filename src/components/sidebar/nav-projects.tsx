@@ -43,20 +43,20 @@ export function NavProjects({ setSelectedProjectId }: { setSelectedProjectId: (i
 
   return (
     <SidebarGroup>
-      {/* ✅ Header with Projects Label & Create Button */}
+      {/* Header with Projects Label & Create Button */}
       <div className="flex items-center justify-between px-2 mb-1">
         <SidebarGroupLabel>Projects</SidebarGroupLabel>
         <Button 
           variant="ghost" 
           size="icon" 
-          onClick={() => setOpenForm(true)} // ✅ Open modal instead of navigating
+          onClick={() => setOpenForm(true)} // Open modal instead of navigating
           className="h-6 w-6 text-gray-500 hover:text-gray-900"
         >
           <PlusCircle size={16} />
         </Button>
       </div>
 
-      {/* ✅ Project List */}
+      {/* Project List */}
       <SidebarMenu>
         {loading ? (
           <p className="px-4 py-2 text-gray-500">Loading projects...</p>
@@ -74,13 +74,13 @@ export function NavProjects({ setSelectedProjectId }: { setSelectedProjectId: (i
         )}
       </SidebarMenu>
 
-      {/* ✅ ProjectForm Modal */}
+      {/* ProjectForm Modal */}
       <ProjectForm 
         open={openForm} 
         setOpen={setOpenForm} 
         onProjectAdded={() => {
           setOpenForm(false);
-          location.reload(); // ✅ Refresh sidebar after adding a project
+          location.reload(); // Refresh sidebar after adding a project
         }} 
       />
     </SidebarGroup>

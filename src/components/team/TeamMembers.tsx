@@ -66,7 +66,7 @@ export default function TeamMembers() {
 
     setIsAdding(true);
     try {
-      // 🔹 **Step 1: Check if user exists in the database**
+      
       const userCheckRes = await fetch(`/api/user/check?email=${email}`);
       const userData = await userCheckRes.json();
 
@@ -76,7 +76,7 @@ export default function TeamMembers() {
         return;
       }
 
-      // 🔹 **Step 2: Send request to add the user to the team**
+      
       const response = await fetch(`/api/team/${team.id}/add-member`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

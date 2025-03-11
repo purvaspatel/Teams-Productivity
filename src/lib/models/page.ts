@@ -4,7 +4,7 @@ const PageSchema = new Schema(
   {
     title: { type: String, required: true },
     content: { type: String, required: true }, // Markdown/HTML content
-    project: { type: Schema.Types.ObjectId, ref: "Project", required: true }, // 🔥 Link to project
+    project: { type: Schema.Types.ObjectId, ref: "Project", required: true }, 
     createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true }

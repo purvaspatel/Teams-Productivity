@@ -11,11 +11,13 @@ Features so far:
 8. Summary on dashboard about various updates and tasks.
 
 Upcoming features I am working on: 
-Remvove user from a team.
-Edit Project details, update a project with new users/remove users etc.
-Create document like Notion.
-Integrate other tools such as drawing board, flow diagram.
-Chat with team members.
+1. Remove user from a team.
+2. Edit Project details, update a project with new users/remove users etc.
+3. Create document like Notion.
+4. Integrate other tools such as drawing board, flow diagram.
+5. Chat with team members.
+
+
 
 To run the project
 1. change directory to codebase-nxt-purva

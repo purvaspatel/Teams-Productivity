@@ -114,10 +114,7 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
                 <Calendar size={14} />
                 <span>Created {format(new Date(project.createdAt), "MMM d, yyyy")}</span>
               </div>
-              <div className="flex items-center gap-1">
-                <Clock size={14} />
-                <span>Updated {format(new Date(project.updatedAt), "MMM d, yyyy")}</span>
-              </div>
+          
               <div className="flex items-center gap-1">
                 <Users size={14} />
                 <span>{project.members?.length || 0} members</span>

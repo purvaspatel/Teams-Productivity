@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { PencilRuler } from 'lucide-react';
+import { MessageCircleMore } from 'lucide-react';
 import { LayoutDashboard, ClipboardPen } from "lucide-react";
 import {
   SidebarGroup,
@@ -37,7 +38,7 @@ export function NavMain() {
 
         <SidebarMenuItem>
           <SidebarMenuButton onClick={() => router.push('/dashboard/chat')} className="cursor-pointer hover:bg-gray-100">
-            <PencilRuler />
+          <MessageCircleMore />
             <span>Messages</span>
           </SidebarMenuButton>
         </SidebarMenuItem>

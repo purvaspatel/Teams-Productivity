@@ -62,8 +62,8 @@ export function NavProjects({ setSelectedProjectId }: { setSelectedProjectId: (i
           <p className="px-4 py-2 text-gray-500">Loading projects...</p>
         ) : projects.length > 0 ? (
           projects.map((project) => (
-            <SidebarMenuItem key={project._id}>
-              <SidebarMenuButton onClick={() => router.push(`/dashboard/projects/${project._id}`)}>
+            <SidebarMenuItem key={project._id} >
+              <SidebarMenuButton onClick={() => router.push(`/dashboard/projects/${project._id}`)} className="cursor-pointer hover:bg-gray-100">
                 <Folder />
                 <span>{project.name}</span>
               </SidebarMenuButton>

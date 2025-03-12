@@ -31,6 +31,7 @@ export default function ProjectForm({
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [teamMembers, setTeamMembers] = useState<string[]>([]);
+  const [avatars, setAvatars] = useState<{ [email: string]: string }>({});
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function ProjectForm({
   }, [session?.user?.email]);
 
   // Fetch team members from API
+  {/* Fetch team members along with avatars */ }
   const fetchTeamMembers = async (email: string) => {
     try {
       const res = await fetch(`/api/team?email=${email}`);
@@ -47,6 +49,21 @@ export default function ProjectForm({
 
       if (res.ok) {
         setTeamMembers(data.members || []);
+
+        // Fetch avatars for team members
+        const avatarPromises = data.members.map(async (memberEmail: string) => {
+          const avatarRes = await fetch(`/api/user/avatar?email=${memberEmail}`);
+          const avatarData = await avatarRes.json();
+          return { email: memberEmail, avatar: avatarRes.ok ? avatarData.avatar : "/default-avatar.png" };
+        });
+
+        const avatarResults = await Promise.all(avatarPromises);
+        const avatarMap = avatarResults.reduce((acc, { email, avatar }) => {
+          acc[email] = avatar;
+          return acc;
+        }, {} as { [email: string]: string });
+
+        setAvatars(avatarMap);
       } else {
         console.warn("No team members found:", data.message);
         setTeamMembers([]);
@@ -56,6 +73,7 @@ export default function ProjectForm({
       toast.error("Failed to fetch team members");
     }
   };
+
 
   // Toggle selection of members
   const toggleMemberSelection = (email: string) => {
@@ -98,13 +116,9 @@ export default function ProjectForm({
         setName("");
         setDescription("");
         setSelectedMembers([]);
-
-        if (onProjectAdded) {
-          onProjectAdded();
-        } else {
-          router.push(`/projects/${data._id}`);
-          router.refresh();
-        }
+        window.location.reload();
+        router.push(`/dashboard/projects/${data._id}`);
+        
       } else {
         const errorData = await res.json();
         throw new Error(errorData.message || "Failed to create project");
@@ -170,7 +184,7 @@ export default function ProjectForm({
                   >
                     <div className="flex items-center gap-3">
                       <Avatar>
-                        <AvatarImage src={`/api/avatar?email=${email}`} />
+                        <AvatarImage src={avatars[email] || "/default-avatar.png"} />
                         <AvatarFallback>{email.charAt(0).toUpperCase()}</AvatarFallback>
                       </Avatar>
                       <div>

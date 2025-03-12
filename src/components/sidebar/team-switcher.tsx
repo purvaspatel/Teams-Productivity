@@ -30,10 +30,10 @@ export function TeamSwitcher() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton size="lg">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground" >
                   <Users className="size-4" />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
+                <div className="grid flex-1 text-left text-sm leading-tight cursor-pointer hover:bg-gray-100">
                   {loading ? (
                     <span className="truncate font-semibold">Loading...</span>
                   ) : (
@@ -45,7 +45,7 @@ export function TeamSwitcher() {
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 rounded-lg" align="start">
-              <DropdownMenuItem onClick={() => router.push('/dashboard/team')}>
+              <DropdownMenuItem onClick={() => router.push('/dashboard/team')} className="cursor-pointer hover:bg-gray-100">
                 <Users className="size-4 text-muted-foreground" />
                 <span>View Team</span>
               </DropdownMenuItem>

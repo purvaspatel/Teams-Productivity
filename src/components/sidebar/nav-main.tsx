@@ -17,7 +17,7 @@ export function NavMain(){
       <SidebarMenu>
         {/* Dashboard Button */}
         <SidebarMenuItem>
-          <SidebarMenuButton onClick={() => router.push('/dashboard')}>
+          <SidebarMenuButton onClick={() => router.push('/dashboard')} className="cursor-pointer hover:bg-gray-100">
             <LayoutDashboard />
             <span>Dashboard</span>
           </SidebarMenuButton>
@@ -25,7 +25,7 @@ export function NavMain(){
 
         {/* Tasks Button */}
         <SidebarMenuItem>
-          <SidebarMenuButton onClick={() => router.push('/dashboard/tasks')}>
+          <SidebarMenuButton onClick={() => router.push('/dashboard/tasks')} className="cursor-pointer hover:bg-gray-100">
             <ClipboardPen />
             <span>Tasks</span>
           </SidebarMenuButton>

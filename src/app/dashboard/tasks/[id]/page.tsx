@@ -127,8 +127,10 @@ export default function TaskDetailsPage() {
                 </div>
             </div>
 
+            <hr></hr>
+
             {/* Task Details */}
-            <div className="grid gap-4 bg-white p-6 rounded-lg shadow-md">
+            <div className="grid gap-4 bg-white p-6 ">
                 <p className="text-gray-700">{task.description}</p>
 
                 <div className="flex items-center gap-2">
@@ -145,7 +147,7 @@ export default function TaskDetailsPage() {
                     <h3 className="font-medium">Assigned To:</h3>
                     <div className="flex flex-wrap gap-2">
                         {task.assignedTo.map((email: string) => (
-                            <div key={email} className="flex items-center gap-2 p-2 border rounded-lg">
+                            <div key={email} className="flex items-center gap-2 p-2 border ">
                                 <Avatar className="w-8 h-8 border">
                                     <AvatarImage src={avatars[email] || "/default-avatar.png"} />
                                     <AvatarFallback>{email.charAt(0).toUpperCase()}</AvatarFallback>

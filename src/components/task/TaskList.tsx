@@ -13,13 +13,14 @@ import TaskForm from "@/components/task/TaskForm";
 import EditTaskForm from './EditTaskForm';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
+import { useRouter } from 'next/navigation';
 interface TaskListProps {
     refresh: boolean;
     setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
+    const router=useRouter();
     const { data: session } = useSession();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
@@ -190,7 +191,7 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
             </div>
 
             {/* Task Table */}
-            <div className="bg-white border-t rounded-lg shadow-md">
+            <div className="bg-white border-t shadow-md">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -205,7 +206,11 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
                     <TableBody>
                         {currentTasks.length > 0 ? (
                             currentTasks.map((task) => (
-                                <TableRow key={task._id as React.Key}>
+                                <TableRow
+                                key={task._id}
+                                onClick={() => router.push(`/dashboard/tasks/${task._id}`)}
+                                className="cursor-pointer hover:bg-gray-100"
+                            >
                                     <TableCell>TID {task.taskID}</TableCell>
                                     <TableCell>
                                         <Badge className='mr-4'>{task.category}</Badge>{task.title}

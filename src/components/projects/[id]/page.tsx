@@ -11,7 +11,9 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Calendar, ChevronLeft, Lock, Trash2, Unlock, Users } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar, ChevronLeft, Lock, Pencil, Trash2, Unlock, Users, X } from "lucide-react";
 import ProjectTasks from "../projecttask";
 interface ProjectDetailPageProps {
   projectId: string;
@@ -26,6 +28,104 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [avatars, setAvatars] = useState<{ [email: string]: string }>({});
   const [refresh, setRefresh] = useState(false); // ✅ Refresh state for tasks
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [editData, setEditData] = useState({
+    name: "",
+    description: "",
+    members: [] as string[],
+    isPrivate: false,
+  });
+  const [newMember, setNewMember] = useState("");
+  const [checkingUser, setCheckingUser] = useState(false);
+
+  useEffect(() => {
+    if (project) {
+      setEditData({
+        name: project.name || "",
+        description: project.description || "",
+        members: project.members || [],
+        isPrivate: project.isPrivate || false,
+      });
+    }
+  }, [project]);
+
+  const handleUpdateProject = async () => {
+    try {
+      const response = await fetch(`/api/projects/${projectId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editData),
+      });
+
+      if (!response.ok) throw new Error("Failed to update project");
+
+      toast.success("Project updated successfully!");
+      setOpenEditDialog(false);
+      fetchProjectData(); // Refresh data
+    } catch (error) {
+      toast.error("Failed to update project");
+    }
+  };
+
+  const checkUserExists = async (email: string) => {
+    try {
+      setCheckingUser(true);
+      const response = await fetch(`/api/user/exists?email=${encodeURIComponent(email)}`);
+      
+      if (!response.ok) {
+        throw new Error("Failed to check user");
+      }
+      
+      const data = await response.json();
+      return data.exists;
+    } catch (error) {
+      console.error("Error checking user:", error);
+      return false;
+    } finally {
+      setCheckingUser(false);
+    }
+  };
+
+  const handleAddMember = async () => {
+    if (!newMember || !newMember.includes('@')) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    
+    if (editData.members.includes(newMember)) {
+      toast.error("This member is already in the project");
+      return;
+    }
+    
+    // Check if user exists in the database
+    const userExists = await checkUserExists(newMember);
+    
+    if (!userExists) {
+      toast.error("User with this email does not exist");
+      return;
+    }
+    
+    setEditData({
+      ...editData,
+      members: [...editData.members, newMember],
+    });
+    setNewMember("");
+    toast.success("Member added successfully");
+  };
+
+  const handleRemoveMember = (email: string) => {
+    // Prevent removing the owner
+    if (email === project.owner) {
+      toast.error("Cannot remove the project owner");
+      return;
+    }
+    
+    setEditData({
+      ...editData,
+      members: editData.members.filter(member => member !== email),
+    });
+    toast.success("Member removed successfully");
+  };
 
   useEffect(() => {
     if (status !== "loading" && projectId) {
@@ -148,34 +248,151 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
           </div>
         </div>
 
-        {isOwner && (
-          <Dialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-50">
-                <Trash2 size={14} />
-                Delete
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you sure?</DialogTitle>
-                <p className="text-sm text-gray-500">
-                  This action is irreversible. Deleting this project will remove all associated tasks and data.
-                </p>
-              </DialogHeader>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setOpenDeleteDialog(false)}>
-                  Cancel
-                </Button>
-                <Button variant="destructive" onClick={handleDeleteProject}>
-                  Yes, Delete
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        )}
-      </div>
+        <div className="flex gap-2">
+          {isOwner && (
+            <>
+              {/* Edit Project Dialog */}
+              <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="flex items-center gap-1">
+                    <Pencil size={14} />
+                    Edit Project
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Edit Project</DialogTitle>
+                  </DialogHeader>
+                  
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <label htmlFor="projectName" className="text-sm font-medium">Project Name</label>
+                      <Input 
+                        id="projectName"
+                        value={editData.name} 
+                        onChange={(e) => setEditData({...editData, name: e.target.value})}
+                        placeholder="Enter project name"
+                      />
+                    </div>
+                    
+                    <div className="grid gap-2">
+                      <label htmlFor="projectDescription" className="text-sm font-medium">Description</label>
+                      <Textarea 
+                        id="projectDescription"
+                        value={editData.description} 
+                        onChange={(e) => setEditData({...editData, description: e.target.value})}
+                        placeholder="Enter project description"
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div className="grid gap-2">
+                      <label className="text-sm font-medium">Privacy</label>
+                      <div className="flex items-center gap-4">
+                        <label className="flex items-center gap-2">
+                          <input 
+                            type="radio" 
+                            checked={!editData.isPrivate} 
+                            onChange={() => setEditData({...editData, isPrivate: false})}
+                          />
+                          <span className="flex items-center gap-1">
+                            <Unlock size={14} />
+                            Public
+                          </span>
+                        </label>
+                        <label className="flex items-center gap-2">
+                          <input 
+                            type="radio" 
+                            checked={editData.isPrivate} 
+                            onChange={() => setEditData({...editData, isPrivate: true})}
+                          />
+                          <span className="flex items-center gap-1">
+                            <Lock size={14} />
+                            Private
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    
+                    <div className="grid gap-2">
+                      <label className="text-sm font-medium">Team Members</label>
+                      <div className="flex flex-wrap gap-2 p-2 border rounded-md min-h-20">
+                        {editData.members.map((member) => (
+                          <div key={member} className="flex items-center gap-1 px-2 py-1 bg-gray-100 rounded-md">
+                            <span className="text-sm">{member}</span>
+                            <button 
+                              type="button" 
+                              className="text-gray-500 hover:text-red-500"
+                              onClick={() => handleRemoveMember(member)}
+                              disabled={member === project.owner}
+                            >
+                              <X size={14} />
+                            </button>
+                            {member === project.owner && 
+                              <Badge variant="outline" className="ml-1 text-xs">Owner</Badge>
+                            }
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex gap-2 mt-2">
+                        <Input
+                          placeholder="Add member by email"
+                          value={newMember}
+                          onChange={(e) => setNewMember(e.target.value)}
+                          disabled={checkingUser}
+                        />
+                        <Button 
+                          size="sm" 
+                          onClick={handleAddMember} 
+                          disabled={checkingUser}
+                        >
+                          {checkingUser ? 'Checking...' : 'Add'}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setOpenEditDialog(false)}>
+                      Cancel
+                    </Button>
+                    <Button onClick={handleUpdateProject}>
+                      Save Changes
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
 
+              {/* Delete Project Dialog */}
+              <Dialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-50">
+                    <Trash2 size={14} />
+                    Delete
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Are you sure?</DialogTitle>
+                    <p className="text-sm text-gray-500">
+                      This action is irreversible. Deleting this project will remove all associated tasks and data.
+                    </p>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setOpenDeleteDialog(false)}>
+                      Cancel
+                    </Button>
+                    <Button variant="destructive" onClick={handleDeleteProject}>
+                      Yes, Delete
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
+        </div>
+      </div>
+        
       {/* Project Description */}
       {project.description && <p className="mt-4 text-gray-600">{project.description}</p>}
 
@@ -184,7 +401,7 @@ export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps)
         <h2 className="text-lg font-semibold mb-2">Team Members</h2>
         <div className="flex flex-wrap gap-4">
           {project.members?.map((member: string) => (
-            <div key={member} className="flex items-center gap-2 p-3 border rounded-lg bg-gray-50">
+            <div key={member} className="flex items-center gap-2 p-3 border bg-gray-50 rounded-md">
               <Avatar>
                 <AvatarImage src={avatars[member] || "/default-avatar.png"} />
                 <AvatarFallback>{member.charAt(0).toUpperCase()}</AvatarFallback>

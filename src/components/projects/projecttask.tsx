@@ -79,7 +79,7 @@ const ProjectTasks: React.FC<ProjectTasksProps> = ({ projectId, refresh, setRefr
         <div className="max-w-6xl  mt-6 mb-10">
             <h2 className="text-2xl font-bold tracking-tight">Project Tasks</h2>
             
-            <div className="mt-6 bg-white border rounded-lg shadow-md">
+            <div className="mt-6 bg-white border  shadow-md">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -93,7 +93,12 @@ const ProjectTasks: React.FC<ProjectTasksProps> = ({ projectId, refresh, setRefr
                     </TableHeader>
                     <TableBody>
                         {tasks.filter(task => task.project === projectId).map((task) => (
-                            <TableRow key={task._id} onClick={() => router.push(`/dashboard/tasks/${task._id}`)}>
+                            <TableRow 
+                            key={task._id} 
+                            onClick={() => router.push(`/dashboard/tasks/${task._id}`)}
+                            className="cursor-pointer hover:bg-gray-100"
+                          >
+                          
                                 <TableCell>{task.title}</TableCell>
                                 <TableCell><Badge>{task.status}</Badge></TableCell>
                                 <TableCell>

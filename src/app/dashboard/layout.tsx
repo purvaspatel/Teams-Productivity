@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex overflow-auto">
+    <div className="flex ">
       <SidebarProvider>
         <AppSidebar setSelectedProjectId={() => {}} setActiveComponent={() => {}} />
         <SidebarInset>

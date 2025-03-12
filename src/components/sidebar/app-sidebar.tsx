@@ -8,7 +8,7 @@ import { NavProjects } from "@/components/sidebar/nav-projects";
 import { NavUser } from "@/components/sidebar/nav-user";
 import { TeamSwitcher } from "@/components/sidebar/team-switcher";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
-
+import { NavPages } from "./nav-pages";
 export function AppSidebar({
   setSelectedProjectId,
   setActiveComponent,
@@ -45,6 +45,7 @@ export function AppSidebar({
         <NavMain setActiveComponent={setActiveComponent} />
         <NavProjects setSelectedProjectId={setSelectedProjectId} />
       </SidebarContent>
+      
       <SidebarFooter>
         {session?.user && (
           <NavUser

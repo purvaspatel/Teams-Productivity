@@ -8,12 +8,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
-export function NavMain(){
-  const router=useRouter();
+import { Folder, PlusCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+export function NavMain() {
+  const router = useRouter();
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+
+      <SidebarGroupLabel  >Platform</SidebarGroupLabel>
+
       <SidebarMenu>
         {/* Dashboard Button */}
         <SidebarMenuItem>

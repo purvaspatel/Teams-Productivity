@@ -10,6 +10,7 @@ Features so far:
 7. Assign specfic team member a task.
 8. Summary on dashboard about various updates and tasks.
 9. Edit Project details, update a project with new users/remove users etc.
+10. Whiteboard [draw, change colors, add texts with various fonts, add images, select, delete, export to PNG] added for personal use.
 
 Upcoming features I am working on: 
 1. Remove user from a team.

@@ -35,6 +35,13 @@ export function NavMain() {
           </SidebarMenuButton>
         </SidebarMenuItem>
 
+        <SidebarMenuItem>
+          <SidebarMenuButton onClick={() => router.push('/dashboard/chat')} className="cursor-pointer hover:bg-gray-100">
+            <PencilRuler />
+            <span>Messages</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+
 
         <SidebarMenuItem>
           <SidebarMenuButton onClick={() => router.push('/dashboard/whiteboard')} className="cursor-pointer hover:bg-gray-100">

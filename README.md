@@ -11,13 +11,13 @@ Features so far:
 8. Summary on dashboard about various updates and tasks.
 9. Edit Project details, update a project with new users/remove users etc.
 10. Whiteboard [draw, change colors, add texts with various fonts, add images, select, delete, export to PNG] added for personal use.
+11. Chat with team members part of projects.
 
 Upcoming features I am working on: 
 1. Remove user from a team.
 2. Create document like Notion.
-3. Integrate other tools such as drawing board, flow diagram.
-4. Chat with team members.
-5. Integrate custom whiteboard
+3. Integrate other tools/apps suchs as google meet/zoom/notion/(custom video conference).
+   
 
 
 

@@ -131,7 +131,7 @@ export default function TaskDetailsPage() {
 
             {/* Task Details */}
             <div className="grid gap-4 bg-white p-6 ">
-                <p className="text-gray-700">{task.description}</p>
+                <h3 className="text-gray-700">{task.description}</h3>
 
                 <div className="flex items-center gap-2">
                     <Badge>{task.status}</Badge>

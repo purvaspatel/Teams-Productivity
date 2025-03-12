@@ -9,13 +9,13 @@ Features so far:
 6. Add other members using the platform to collaborate on the project
 7. Assign specfic team member a task.
 8. Summary on dashboard about various updates and tasks.
+9. Edit Project details, update a project with new users/remove users etc.
 
 Upcoming features I am working on: 
 1. Remove user from a team.
-2. Edit Project details, update a project with new users/remove users etc.
-3. Create document like Notion.
-4. Integrate other tools such as drawing board, flow diagram.
-5. Chat with team members.
+2. Create document like Notion.
+3. Integrate other tools such as drawing board, flow diagram.
+4. Chat with team members.
 
 
 

@@ -16,6 +16,7 @@ Upcoming features I am working on:
 2. Create document like Notion.
 3. Integrate other tools such as drawing board, flow diagram.
 4. Chat with team members.
+5. Integrate custom whiteboard
 
 
 

@@ -24,7 +24,7 @@ export function AppSidebar({
     async function fetchTeams() {
       if (!session?.user?.email) return;
       try {
-        const res = await fetch(`/api/teams?email=${session.user.email}`);
+        const res = await fetch(`/api/team?email=${session.user.email}`);
         if (res.ok) {
           const teams = await res.json();
           setTeam(teams.length ? teams[0] : null);

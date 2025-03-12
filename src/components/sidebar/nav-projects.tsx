@@ -12,14 +12,14 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import ProjectForm from "../projectForm/page"; // ✅ Import ProjectForm
+import ProjectForm from "../projectForm/page"; 
 
 export function NavProjects({ setSelectedProjectId }: { setSelectedProjectId: (id: string | null) => void }) {
   const { data: session } = useSession();
   const router = useRouter();
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [openForm, setOpenForm] = useState(false); // ✅ State for modal
+  const [openForm, setOpenForm] = useState(false); 
 
   useEffect(() => {
     async function fetchProjects() {
@@ -44,7 +44,7 @@ export function NavProjects({ setSelectedProjectId }: { setSelectedProjectId: (i
   return (
     <SidebarGroup>
       {/* Header with Projects Label & Create Button */}
-      <div className="flex items-center justify-between px-2 mb-1">
+      <div className="flex items-center justify-between  mb-1">
         <SidebarGroupLabel>Projects</SidebarGroupLabel>
         <Button 
           variant="ghost" 

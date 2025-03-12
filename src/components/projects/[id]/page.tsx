@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { format } from "date-fns";
 
@@ -19,8 +19,10 @@ interface ProjectDetailPageProps {
   projectId: string;
 }
 
-export default function ProjectDetailPage({ projectId }: ProjectDetailPageProps) {
+export default function ProjectDetailPage() {
   const router = useRouter();
+  const params = useParams(); 
+  const projectId = params?.id; 
   const { data: session, status } = useSession();
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);

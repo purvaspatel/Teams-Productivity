@@ -13,6 +13,9 @@ Features so far:
 10. Whiteboard [draw, change colors, add texts with various fonts, add images, select, delete, export to PNG] added for personal use.
 11. Chat with team members part of projects.
 12. Tasks and chats associated with a project deleted when the project is deleted.
+13. Kanban board added with drag and drop feature.
+
+
 Upcoming features I am working on: 
 1. Remove user from a team.
 2. Create document like Notion.

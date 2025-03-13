@@ -21,8 +21,8 @@ interface ProjectDetailPageProps {
 
 export default function ProjectDetailPage() {
   const router = useRouter();
-  const params = useParams(); 
-  const projectId = params?.id; 
+  const params = useParams();
+  const [projectId, setProjectId] = useState<string | null>(null);
   const { data: session, status } = useSession();
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -51,6 +51,14 @@ export default function ProjectDetailPage() {
     }
   }, [project]);
 
+  useEffect(() => {
+    async function getParams() {
+      const resolvedParams = await params;
+      setProjectId(resolvedParams?.id || null);
+    }
+    getParams();
+  }, [params]);
+
   const handleUpdateProject = async () => {
     try {
       const response = await fetch(`/api/projects/${projectId}`, {
@@ -73,11 +81,11 @@ export default function ProjectDetailPage() {
     try {
       setCheckingUser(true);
       const response = await fetch(`/api/user/exists?email=${encodeURIComponent(email)}`);
-      
+
       if (!response.ok) {
         throw new Error("Failed to check user");
       }
-      
+
       const data = await response.json();
       return data.exists;
     } catch (error) {
@@ -93,20 +101,20 @@ export default function ProjectDetailPage() {
       toast.error("Please enter a valid email address");
       return;
     }
-    
+
     if (editData.members.includes(newMember)) {
       toast.error("This member is already in the project");
       return;
     }
-    
+
     // Check if user exists in the database
     const userExists = await checkUserExists(newMember);
-    
+
     if (!userExists) {
       toast.error("User with this email does not exist");
       return;
     }
-    
+
     setEditData({
       ...editData,
       members: [...editData.members, newMember],
@@ -121,7 +129,7 @@ export default function ProjectDetailPage() {
       toast.error("Cannot remove the project owner");
       return;
     }
-    
+
     setEditData({
       ...editData,
       members: editData.members.filter(member => member !== email),
@@ -140,6 +148,7 @@ export default function ProjectDetailPage() {
     setLoading(true);
     setError(null);
     try {
+      if (!projectId) return; // Ensure projectId is available
       const projectRes = await fetch(`/api/projects/${projectId}`);
       if (!projectRes.ok) throw new Error(`Failed to fetch project: ${projectRes.status}`);
       const projectData = await projectRes.json();
@@ -265,37 +274,37 @@ export default function ProjectDetailPage() {
                   <DialogHeader>
                     <DialogTitle>Edit Project</DialogTitle>
                   </DialogHeader>
-                  
+
                   <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
                       <label htmlFor="projectName" className="text-sm font-medium">Project Name</label>
-                      <Input 
+                      <Input
                         id="projectName"
-                        value={editData.name} 
-                        onChange={(e) => setEditData({...editData, name: e.target.value})}
+                        value={editData.name}
+                        onChange={(e) => setEditData({ ...editData, name: e.target.value })}
                         placeholder="Enter project name"
                       />
                     </div>
-                    
+
                     <div className="grid gap-2">
                       <label htmlFor="projectDescription" className="text-sm font-medium">Description</label>
-                      <Textarea 
+                      <Textarea
                         id="projectDescription"
-                        value={editData.description} 
-                        onChange={(e) => setEditData({...editData, description: e.target.value})}
+                        value={editData.description}
+                        onChange={(e) => setEditData({ ...editData, description: e.target.value })}
                         placeholder="Enter project description"
                         rows={3}
                       />
                     </div>
-                    
+
                     <div className="grid gap-2">
                       <label className="text-sm font-medium">Privacy</label>
                       <div className="flex items-center gap-4">
                         <label className="flex items-center gap-2">
-                          <input 
-                            type="radio" 
-                            checked={!editData.isPrivate} 
-                            onChange={() => setEditData({...editData, isPrivate: false})}
+                          <input
+                            type="radio"
+                            checked={!editData.isPrivate}
+                            onChange={() => setEditData({ ...editData, isPrivate: false })}
                           />
                           <span className="flex items-center gap-1">
                             <Unlock size={14} />
@@ -303,10 +312,10 @@ export default function ProjectDetailPage() {
                           </span>
                         </label>
                         <label className="flex items-center gap-2">
-                          <input 
-                            type="radio" 
-                            checked={editData.isPrivate} 
-                            onChange={() => setEditData({...editData, isPrivate: true})}
+                          <input
+                            type="radio"
+                            checked={editData.isPrivate}
+                            onChange={() => setEditData({ ...editData, isPrivate: true })}
                           />
                           <span className="flex items-center gap-1">
                             <Lock size={14} />
@@ -315,22 +324,22 @@ export default function ProjectDetailPage() {
                         </label>
                       </div>
                     </div>
-                    
+
                     <div className="grid gap-2">
                       <label className="text-sm font-medium">Team Members</label>
                       <div className="flex flex-wrap gap-2 p-2 border rounded-md min-h-20">
                         {editData.members.map((member) => (
                           <div key={member} className="flex items-center gap-1 px-2 py-1 bg-gray-100 rounded-md">
                             <span className="text-sm">{member}</span>
-                            <button 
-                              type="button" 
+                            <button
+                              type="button"
                               className="text-gray-500 hover:text-red-500"
                               onClick={() => handleRemoveMember(member)}
                               disabled={member === project.owner}
                             >
                               <X size={14} />
                             </button>
-                            {member === project.owner && 
+                            {member === project.owner &&
                               <Badge variant="outline" className="ml-1 text-xs">Owner</Badge>
                             }
                           </div>
@@ -343,9 +352,9 @@ export default function ProjectDetailPage() {
                           onChange={(e) => setNewMember(e.target.value)}
                           disabled={checkingUser}
                         />
-                        <Button 
-                          size="sm" 
-                          onClick={handleAddMember} 
+                        <Button
+                          size="sm"
+                          onClick={handleAddMember}
                           disabled={checkingUser}
                         >
                           {checkingUser ? 'Checking...' : 'Add'}
@@ -353,7 +362,7 @@ export default function ProjectDetailPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setOpenEditDialog(false)}>
                       Cancel
@@ -394,7 +403,7 @@ export default function ProjectDetailPage() {
           )}
         </div>
       </div>
-        
+
       {/* Project Description */}
       {project.description && <p className="mt-4 text-gray-600">{project.description}</p>}
 

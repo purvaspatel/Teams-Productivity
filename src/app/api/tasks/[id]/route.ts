@@ -29,7 +29,24 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
     }
     
 }
-
+export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+    try {
+      await connectToDatabase();
+      const taskId = params.id;
+      const taskUpdates = await req.json();
+  
+      const updatedTask = await Task.findByIdAndUpdate(taskId, taskUpdates, { new: true });
+  
+      if (!updatedTask) {
+        return NextResponse.json({ message: "Task not found" }, { status: 404 });
+      }
+  
+      return NextResponse.json(updatedTask, { status: 200 });
+    } catch (error) {
+      console.error("Error updating task:", error);
+      return NextResponse.json({ message: "Failed to update task" }, { status: 500 });
+    }
+  }
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
     try {
         await connectToDatabase();

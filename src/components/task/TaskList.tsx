@@ -14,13 +14,14 @@ import EditTaskForm from './EditTaskForm';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useRouter } from 'next/navigation';
+import { Kanban } from 'lucide-react';
 interface TaskListProps {
     refresh: boolean;
     setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
-    const router=useRouter();
+    const router = useRouter();
     const { data: session } = useSession();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
@@ -29,7 +30,7 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
     const [statusFilter, setStatusFilter] = useState("");
     const [priorityFilter, setPriorityFilter] = useState("");
     const [avatars, setAvatars] = useState<{ [email: string]: string }>({});
-    
+
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const tasksPerPage = 7;
@@ -41,7 +42,7 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
 
             const res = await fetch('/api/tasks');
             const data = await res.json();
-            
+
             // Filter tasks to show only those created by or assigned to the user
             const userTasks = data.filter((task: Task) =>
                 task.createdBy === session.user.email || task.assignedTo.includes(session.user.email)
@@ -59,27 +60,27 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
     /** Apply filters and search */
     useEffect(() => {
         let result = [...tasks];
-        
+
         // Apply search filter
         if (search) {
             const searchLower = search.toLowerCase();
-            result = result.filter(task => 
-                task.title.toLowerCase().includes(searchLower) || 
+            result = result.filter(task =>
+                task.title.toLowerCase().includes(searchLower) ||
                 task.category.toLowerCase().includes(searchLower) ||
                 String(task.taskID).includes(search)
             );
         }
-        
+
         // Apply status filter
         if (statusFilter) {
             result = result.filter(task => task.status === statusFilter);
         }
-        
+
         // Apply priority filter
         if (priorityFilter) {
             result = result.filter(task => task.priority === priorityFilter);
         }
-        
+
         setFilteredTasks(result);
         // Reset to first page when filters change
         setCurrentPage(1);
@@ -142,8 +143,13 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
 
     return (
         <div className="max-w-6xl mx-auto p-6">
-            <h1 className="scroll-m-20 text-3xl font-bold tracking-tight lg:text-3xl">Your Tasks</h1>
-
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="scroll-m-20 text-3xl font-bold tracking-tight lg:text-3xl">Your Tasks</h1>
+                <Button onClick={() => router.push('/dashboard/tasks/kanban')} variant="outline" className="flex items-center gap-2">
+                    <Kanban size={16} />
+                    <span>Board View</span>
+                </Button>
+            </div>
             {editTask && <EditTaskForm task={editTask} onClose={() => setEditTask(null)} onUpdated={() => setRefresh(!refresh)} />}
 
             {/* Filter Bar */}
@@ -211,7 +217,7 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
                                 // key={task._id}
                                 // onClick={() => router.push(`/dashboard/tasks/${task._id}`)}
                                 // className="cursor-pointer hover:bg-gray-100"
-                            >
+                                >
                                     <TableCell>TID {task.taskID}</TableCell>
                                     <TableCell>
                                         <Badge className='mr-4'>{task.category}</Badge>{task.title}
@@ -280,15 +286,15 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
                         Showing {indexOfFirstTask + 1} to {Math.min(indexOfLastTask, filteredTasks.length)} of {filteredTasks.length} tasks
                     </div>
                     <div className="flex items-center space-x-2">
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             size="sm"
                             onClick={prevPage}
                             disabled={currentPage === 1}
                         >
                             <ChevronLeft size={16} />
                         </Button>
-                        
+
                         {/* Page numbers */}
                         <div className="flex items-center space-x-1">
                             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -300,7 +306,7 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
                                         pageToShow = totalPages - 4 + i;
                                     }
                                 }
-                                
+
                                 return (
                                     <Button
                                         key={pageToShow}
@@ -314,9 +320,9 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
                                 );
                             })}
                         </div>
-                        
-                        <Button 
-                            variant="outline" 
+
+                        <Button
+                            variant="outline"
                             size="sm"
                             onClick={nextPage}
                             disabled={currentPage === totalPages}

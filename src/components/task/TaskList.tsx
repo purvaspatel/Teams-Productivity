@@ -121,6 +121,7 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
     const handleDelete = async (taskId: string) => {
         const res = await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
         if (res.ok) {
+            router.push('/dashboard/tasks');
             setRefresh(!refresh);
             toast.success('Task deleted successfully');
         } else {
@@ -207,9 +208,9 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
                         {currentTasks.length > 0 ? (
                             currentTasks.map((task) => (
                                 <TableRow
-                                key={task._id}
-                                onClick={() => router.push(`/dashboard/tasks/${task._id}`)}
-                                className="cursor-pointer hover:bg-gray-100"
+                                // key={task._id}
+                                // onClick={() => router.push(`/dashboard/tasks/${task._id}`)}
+                                // className="cursor-pointer hover:bg-gray-100"
                             >
                                     <TableCell>TID {task.taskID}</TableCell>
                                     <TableCell>
@@ -251,6 +252,7 @@ const TaskList: React.FC<TaskListProps> = ({ refresh, setRefresh }) => {
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="start">
+                                                <DropdownMenuItem onClick={() => router.push(`/dashboard/tasks/${task._id}`)}>View Details</DropdownMenuItem>
                                                 <DropdownMenuItem onClick={() => setEditTask(task)}>Edit</DropdownMenuItem>
                                                 <DropdownMenuItem onClick={() => handleDelete(task._id as string)} className="text-red-500">
                                                     Delete

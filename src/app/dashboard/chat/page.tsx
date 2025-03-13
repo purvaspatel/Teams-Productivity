@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAvatarStore } from '@/lib/store/avatarStore';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Send } from "lucide-react";
 interface Project {
     _id: string;
     name: string;
@@ -130,7 +131,7 @@ export default function ChatDashboard() {
     }
 
     return (
-        <div className="flex h-[80vh] w-3/4 mx-auto bg-gray-100 border  shadow-lg overflow-hidden">
+        <div className="flex h-[80vh]  mx-auto bg-gray-100 border  shadow-lg overflow-hidden" style={{ minHeight: "calc(100vh - 180px)" }}>
 
             {/* Projects sidebar */}
             <Card className="w-1/3 border-r border-gray-300 flex flex-col ">
@@ -144,10 +145,10 @@ export default function ChatDashboard() {
                             className={`flex items-center p-2 border-b cursor-pointer hover:bg-gray-50 ${selectedProject?._id === project._id ? 'bg-blue-50' : ''}`}
                             onClick={() => setSelectedProject(project)}
                         >
-                            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            <div className="w-10 h-10 bg-red-400 rounded-full flex items-center justify-center text-white mr-3">
                                 {project.name.charAt(0).toUpperCase()}
                             </div>
-                            <h3 className="font-semibold">{project.name}</h3>
+                            <h3 className="">{project.name}</h3>
                         </div>
                     ))}
                 </ScrollArea>
@@ -216,7 +217,10 @@ export default function ChatDashboard() {
                                 placeholder="Type a message..."
                                 className="flex-1"
                             />
-                            <Button type="submit" disabled={!newMessage.trim()} className="ml-2">Send</Button>
+                            <Button type="submit" disabled={!newMessage.trim()} className="ml-2">Send
+                            <Send className="h-5 w-5" />
+                            </Button>
+                            
                         </form>
                     </>
                 ) : (

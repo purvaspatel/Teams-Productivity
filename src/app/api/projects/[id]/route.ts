@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import Project from "@/lib/models/project";
-
+import Task from "@/lib/models/task";
+import Chat from "@/lib/models/chat";
 /** Get a specific project by ID */
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -38,19 +39,34 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-/** Delete a project */
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+
+
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
     await connectToDatabase();
-    const deletedProject = await Project.findOneAndDelete({ _id: params.id });
 
-    if (!deletedProject) {
+    const projectId = params.id; // projectId is stored as a string in Chat
+
+    // Ensure the project exists before attempting deletion
+    const project = await Project.findById(projectId);
+    if (!project) {
       return NextResponse.json({ message: "Project not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "Project deleted successfully" }, { status: 200 });
+    // 🔹 Delete all tasks associated with this project
+    await Task.deleteMany({ project: projectId });
+
+    // 🔹 Delete all chats associated with this project (matching string ID)
+    await Chat.deleteMany({ project: projectId });
+
+    // 🔹 Finally, delete the project
+    await Project.findByIdAndDelete(projectId);
+
+    return NextResponse.json({ message: "Project, tasks, and chats deleted successfully" }, { status: 200 });
+
   } catch (error) {
-    console.error("Error deleting project:", error);
+    console.error("Error deleting project, tasks, and chats:", error);
     return NextResponse.json({ message: "Failed to delete project" }, { status: 500 });
   }
 }
+

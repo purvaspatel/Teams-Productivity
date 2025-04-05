@@ -55,8 +55,18 @@ export default function DashboardPage() {
       const avatarRes = await fetch(`/api/user/avatar?email=${email}`);
       const avatarData = avatarRes.ok ? await avatarRes.json() : { avatar: "/default-avatar.png" };
 
-      setTasks(tasksData);
-      setProjects(projectsData);
+      // Make sure to only set tasks that belong to the current user
+      const userTasks = tasksData.filter(task => 
+        task.assignedTo && task.assignedTo.includes(email)
+      );
+
+      // Make sure to only set projects that the user is a member of
+      const userProjects = projectsData.filter(project => 
+        project.members && project.members.includes(email)
+      );
+
+      setTasks(userTasks);
+      setProjects(userProjects);
       setUserAvatar(avatarData.avatar);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -114,7 +124,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-2">
               <Button onClick={() => router.push('/dashboard/tasks')} size="sm">
-                Manage Task
+                Manage Tasks
               </Button>
             </div>
           </div>
@@ -258,44 +268,42 @@ export default function DashboardPage() {
                       </div>
                     ) : tasks.length > 0 ? (
                       <div className="space-y-3">
-                        {tasks
-                          .filter((task) => task.assignedTo.includes(session?.user?.email))
-                          .map((task) => (
-                            <div
-                              key={task._id}
-                              className="flex items-center justify-between p-3 rounded-md bg-white border hover:bg-gray-50 cursor-pointer"
-                              onClick={() => router.push(`/dashboard/tasks/${task._id}`)}
-                            >
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                  <p className="font-medium truncate">{task.title}</p>
-                                  {task.priority === "high" && (
-                                    <Badge variant="outline" className="bg-red-50 text-red-600 text-xs">High</Badge>
-                                  )}
-                                </div>
-                                <p className="text-sm text-gray-500">
-                                  {task.projectName && <span className="font-medium">{task.projectName}</span>}
-                                  {task.projectName && task.dueDate && " - "}
-                                  {task.dueDate && (
-                                    <span>
-                                      Due {formatDistanceToNow(parseISO(task.dueDate), { addSuffix: true })}
-                                    </span>
-                                  )}
-                                </p>
+                        {tasks.map((task) => (
+                          <div
+                            key={task._id}
+                            className="flex items-center justify-between p-3 rounded-md bg-white border hover:bg-gray-50 cursor-pointer"
+                            onClick={() => router.push(`/dashboard/tasks/${task._id}`)}
+                          >
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="font-medium truncate">{task.title}</p>
+                                {task.priority === "high" && (
+                                  <Badge variant="outline" className="bg-red-50 text-red-600 text-xs">High</Badge>
+                                )}
                               </div>
-                              <Badge
-                                variant="outline"
-                                className={`
-                                  ${task.status === "todo" ? "bg-blue-50 text-blue-700" : ""}
-                                  ${task.status === "in-progress" ? "bg-amber-50 text-amber-700" : ""}
-                                  ${task.status === "review" ? "bg-purple-50 text-purple-700" : ""}
-                                  ${task.status === "complete" ? "bg-green-50 text-green-700" : ""}
-                                `}
-                              >
-                                {task.status}
-                              </Badge>
+                              <p className="text-sm text-gray-500">
+                                {task.projectName && <span className="font-medium">{task.projectName}</span>}
+                                {task.projectName && task.dueDate && " - "}
+                                {task.dueDate && (
+                                  <span>
+                                    Due {formatDistanceToNow(parseISO(task.dueDate), { addSuffix: true })}
+                                  </span>
+                                )}
+                              </p>
                             </div>
-                          ))}
+                            <Badge
+                              variant="outline"
+                              className={`
+                                ${task.status === "todo" ? "bg-blue-50 text-blue-700" : ""}
+                                ${task.status === "in-progress" ? "bg-amber-50 text-amber-700" : ""}
+                                ${task.status === "review" ? "bg-purple-50 text-purple-700" : ""}
+                                ${task.status === "complete" ? "bg-green-50 text-green-700" : ""}
+                              `}
+                            >
+                              {task.status}
+                            </Badge>
+                          </div>
+                        ))}
                       </div>
                     ) : (
                       <p className="text-gray-500 text-center py-4">No tasks assigned to you.</p>
@@ -382,4 +390,4 @@ function StatCard({
       </div>
     </Card>
   );
-};
+}
